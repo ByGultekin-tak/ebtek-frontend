@@ -10,6 +10,16 @@ import (
 func dashboard(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hoş geldiniz! Bu korumalı dashboard sayfasıdır.")
 }
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"ebtek-frontend/auth"
+)
+
+func dashboard(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hoş geldiniz! Bu korumalı dashboard sayfasıdır.")
+}
 
 func main() {
 	http.HandleFunc("/login", auth.LoginHandler)
