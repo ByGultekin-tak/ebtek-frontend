@@ -1,0 +1,250 @@
+{{define "content"}}
+<div class="bg-white shadow-md rounded-lg overflow-hidden max-w-7xl mx-auto">
+    <!-- Görsel Galerisi -->
+    <div class="relative h-96 bg-gray-100">
+        {{if .Images}}
+            {{with index .Images 0}}
+            <img src="{{.}}" alt="Ana Görsel" class="w-full h-full object-cover">
+            {{end}}
+            {{if gt (len .Images) 1}}
+            <div class="absolute bottom-4 right-4">
+                <button onclick="openGallery()" class="px-4 py-2 bg-white text-gray-800 rounded-lg shadow-md hover:bg-gray-50">
+                    <i class="fas fa-images mr-2"></i>Tüm Fotoğraflar ({{len .Images}})
+                </button>
+            </div>
+            {{end}}
+        {{else}}
+            <div class="flex items-center justify-center h-full">
+                <i class="fas fa-image text-6xl text-gray-300"></i>
+            </div>
+        {{end}}
+    </div>
+
+    <div class="p-6">
+        <!-- Başlık ve Fiyat -->
+        <div class="flex justify-between items-start mb-6">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">{{.Title}}</h1>
+                <p class="text-gray-600 mt-2">
+                    <i class="fas fa-map-marker-alt mr-2"></i>{{.Location}}
+                </p>
+            </div>
+            <div class="text-right">
+                <p class="text-3xl font-bold text-blue-600">₺{{.Price}}</p>
+                <p class="text-sm text-gray-500 mt-1">
+                    <i class="far fa-clock mr-1"></i>{{.CreatedAt.Format "02.01.2006"}}
+                </p>
+            </div>
+        </div>
+
+        <!-- Detaylar -->
+        <div class="mb-8">
+            <h2 class="text-lg font-semibold mb-4">
+                {{if eq .Type "property"}}Emlak Detayları{{else}}Araç Detayları{{end}}
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {{if eq .Type "property"}}
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Alan</span>
+                        <p class="font-medium">{{.Property.Area}} m²</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Oda Sayısı</span>
+                        <p class="font-medium">{{.Property.Rooms}}</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Kat</span>
+                        <p class="font-medium">{{.Property.Floor}}. Kat</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Bina Yaşı</span>
+                        <p class="font-medium">{{.Property.Age}} Yaşında</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Isıtma</span>
+                        <p class="font-medium">{{.Property.Heating}}</p>
+                    </div>
+                {{else}}
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Marka</span>
+                        <p class="font-medium">{{.Vehicle.Brand}}</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Model</span>
+                        <p class="font-medium">{{.Vehicle.Model}}</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Yıl</span>
+                        <p class="font-medium">{{.Vehicle.Year}}</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Kilometre</span>
+                        <p class="font-medium">{{.Vehicle.Kilometer}} km</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Yakıt</span>
+                        <p class="font-medium">{{.Vehicle.FuelType}}</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Vites</span>
+                        <p class="font-medium">{{.Vehicle.Transmission}}</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <span class="text-sm text-gray-500">Renk</span>
+                        <p class="font-medium">{{.Vehicle.Color}}</p>
+                    </div>
+                {{end}}
+            </div>
+        </div>
+
+        <!-- Açıklama -->
+        <div class="mb-8">
+            <h2 class="text-lg font-semibold mb-4">Açıklama</h2>
+            <div class="text-gray-600 whitespace-pre-line">{{.Description}}</div>
+        </div>
+
+        <!-- Özellikler -->
+        {{if eq .Type "property"}}
+            {{if .Property.Features}}
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold mb-4">Özellikler</h2>
+                <div class="flex flex-wrap gap-2">
+                    {{range .Property.Features}}
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                        {{.}}
+                    </span>
+                    {{end}}
+                </div>
+            </div>
+            {{end}}
+        {{else}}
+            {{if .Vehicle.Features}}
+            <div class="mb-8">
+                <h2 class="text-lg font-semibold mb-4">Özellikler</h2>
+                <div class="flex flex-wrap gap-2">
+                    {{range .Vehicle.Features}}
+                    <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                        {{.}}
+                    </span>
+                    {{end}}
+                </div>
+            </div>
+            {{end}}
+        {{end}}
+
+        <!-- İlan Sahibi ve İletişim -->
+        <div class="mt-8 p-6 bg-gray-50 rounded-lg">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <img src="https://ui-avatars.com/api/?name={{.UserName}}" 
+                        alt="{{.UserName}}" 
+                        class="w-12 h-12 rounded-full">
+                    <div>
+                        <div class="font-medium text-gray-900">{{.UserName}}</div>
+                        <div class="text-sm text-gray-500">İlan Sahibi</div>
+                    </div>
+                </div>
+                <div class="space-x-3">
+                    <button onclick="contactSeller()" 
+                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="fas fa-envelope mr-2"></i>
+                        Mesaj Gönder
+                    </button>
+                    <button onclick="addToFavorites()" 
+                        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i class="far fa-heart mr-2"></i>
+                        Favorilere Ekle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resim Galerisi Modal -->
+<div id="galleryModal" 
+    class="hidden fixed inset-0 z-50 overflow-y-auto" 
+    aria-labelledby="modal-title" 
+    role="dialog" 
+    aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" 
+            aria-hidden="true"
+            onclick="closeGallery()"></div>
+
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-5xl sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {{range .Images}}
+                    <img src="{{.}}" 
+                        alt="İlan Görseli" 
+                        class="w-full h-48 object-cover rounded-lg cursor-zoom-in hover:opacity-90"
+                        onclick="openImagePreview(this.src)">
+                    {{end}}
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="button" 
+                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                    onclick="closeGallery()">
+                    Kapat
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tam Ekran Resim Önizleme Modal -->
+<div id="imagePreviewModal" 
+    class="hidden fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
+    onclick="closeImagePreview()">
+    <button onclick="closeImagePreview()" 
+        class="absolute top-4 right-4 text-white text-xl hover:text-gray-300">
+        <i class="fas fa-times"></i>
+    </button>
+    <img id="previewImage" src="" alt="Büyük Görsel" class="max-h-screen max-w-screen-lg object-contain">
+</div>
+
+<script>
+function openGallery() {
+    document.getElementById('galleryModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeGallery() {
+    document.getElementById('galleryModal').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+function openImagePreview(src) {
+    const modal = document.getElementById('imagePreviewModal');
+    const img = document.getElementById('previewImage');
+    modal.classList.remove('hidden');
+    img.src = src;
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImagePreview() {
+    document.getElementById('imagePreviewModal').classList.add('hidden');
+    document.body.style.overflow = '';
+}
+
+function contactSeller() {
+    // Mesaj gönderme fonksiyonu implement edilecek
+    alert('Mesaj gönderme özelliği yakında eklenecektir.');
+}
+
+function addToFavorites() {
+    // Favorilere ekleme fonksiyonu implement edilecek
+    alert('Favorilere ekleme özelliği yakında eklenecektir.');
+}
+
+// ESC tuşu ile modalleri kapatma
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeGallery();
+        closeImagePreview();
+    }
+});
+</script>
+{{end}}

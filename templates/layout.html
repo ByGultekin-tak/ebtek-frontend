@@ -1,0 +1,114 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}} - EBTEK Emlak & Araç</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        blue: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        [x-cloak] { display: none !important; }
+    </style>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div x-data="{ sidebarOpen: false }" class="relative min-h-screen md:flex">
+        <!-- Sidebar -->
+        <div :class="{'block': sidebarOpen, 'hidden': !sidebarOpen}" 
+            class="bg-blue-800 text-blue-100 w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform md:relative md:translate-x-0 transition duration-200 ease-in-out md:block">
+            
+            <!-- Logo -->
+            <div class="flex items-center space-x-2 px-4">
+                <i class="fas fa-building text-2xl"></i>
+                <span class="text-2xl font-extrabold">EBTEK</span>
+            </div>
+
+            <!-- Nav -->
+            <nav>
+                <a href="/dashboard" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
+                    <i class="fas fa-home mr-2"></i>Ana Sayfa
+                </a>
+                <a href="/new-listing" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
+                    <i class="fas fa-plus-circle mr-2"></i>Yeni İlan
+                </a>
+                <a href="/my-listings" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
+                    <i class="fas fa-list mr-2"></i>İlanlarım
+                </a>
+                <a href="/favorites" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
+                    <i class="fas fa-heart mr-2"></i>Favorilerim
+                </a>
+                <a href="/messages" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
+                    <i class="fas fa-envelope mr-2"></i>Mesajlar
+                </a>
+                <a href="/profile" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 hover:text-white">
+                    <i class="fas fa-user mr-2"></i>Profilim
+                </a>
+            </nav>
+        </div>
+
+        <!-- Content -->
+        <div class="flex-1 md:ml-64">
+            <!-- Top Navbar -->
+            <div class="bg-white shadow-lg">
+                <div class="container mx-auto">
+                    <div class="flex items-center justify-between p-4">
+                        <button class="p-2 rounded-md hover:bg-gray-100 md:hidden" @click="sidebarOpen = !sidebarOpen">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        
+                        <div class="flex items-center space-x-4">
+                            <div class="relative" x-data="{ open: false }">
+                                <button @click="open = !open" class="flex items-center space-x-2 text-gray-700 hover:text-blue-600">
+                                    <img src="https://ui-avatars.com/api/?name={{.Username}}" class="w-8 h-8 rounded-full">
+                                    <span>{{.Username}}</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md shadow-xl z-20">
+                                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <i class="fas fa-user mr-2"></i>Profil
+                                    </a>
+                                    <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                        <i class="fas fa-cog mr-2"></i>Ayarlar
+                                    </a>
+                                    <a href="/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Çıkış Yap
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="container mx-auto px-6 py-8">
+                {{template "content" .}}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{{end}}
